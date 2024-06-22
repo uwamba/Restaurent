@@ -121,12 +121,12 @@
 
     </li>
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#taTpDropDown_stock"
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#taTpDropDown_order"
             aria-expanded="true" aria-controls="taTpDropDown">
             <i class="fa fa-plus-square" aria-hidden="true"></i>
             <span>Order</span>
         </a>
-        <div id="taTpDropDown_stock" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="taTpDropDown_order" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Orders:</h6>
                 <a class="collapse-item" href="{{route('order.index')}}">List</a>

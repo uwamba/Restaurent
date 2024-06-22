@@ -7,18 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use app\Models\User;
 
 
+
 class Order extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'descriptions',
+        'customer_name',
+        'phone',
+        'description',
         'user_id',
     ];
 
-    public function menu()
+    public function menus()
     {
-    	return $this->belongsToMany(Menu::class);
+    	return $this->belongsToMany(Menu::class,'menu_order', 'order_id', 'menu_id');
     }
 
     public function User()

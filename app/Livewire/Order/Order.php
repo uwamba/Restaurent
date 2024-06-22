@@ -3,7 +3,7 @@
 namespace App\Livewire\Order;
 
 use Livewire\Component;
-use App\Models\Category;
+use App\Models\Menu;
 
 class Order extends Component
 {
@@ -11,26 +11,26 @@ class Order extends Component
     {
         return view('livewire.order.order');
     }
-    public $orderProducts = [];
-    public $allProducts = [];
+    public $orderMenus = [];
+    public $allMenus = [];
 
     public function mount()
     {
-        $this->allProducts = Category::all();
-        $this->orderProducts = [
-            ['product_id' => '', 'quantity' => 1]
+        $this->allMenus = Menu::all();
+        $this->orderMenus = [
+            ['menu_id' => '', 'quantity' => 1]
         ];
     }
 
-    public function addProduct()
+    public function addMenu()
     {
-        $this->orderProducts[] = ['product_id' => '', 'quantity' => 1];
+        $this->orderMenus[] = ['menu_id' => '', 'quantity' => 1];
     }
 
-    public function removeProduct($index)
+    public function removeMenu($index)
     {
-        unset($this->orderProducts[$index]);
-        $this->orderProducts = array_values($this->orderProducts);
+        unset($this->orderMenus[$index]);
+        $this->orderMenus = array_values($this->orderMenus);
     }
 
 

@@ -28,8 +28,8 @@ class OrderController extends Controller
     public function index()
     {
         $data =  $this->orderService->getAll();
-        $order = PaginationHelper::paginate($data, 10);
-        return view('admin.order.index',['order'=>$order ]);
+        $orders = PaginationHelper::paginate($data, 10);
+        return view('admin.order.index',['orders'=>$orders ]);
     }
 
     /**
@@ -50,15 +50,18 @@ class OrderController extends Controller
 
         $order = Order::create([
             'customer_name' => $request->customer_name,
-            'customer_email' => $request->customer_email,
+            'phone' => $request->phone,
+            'user_id' => "1",
+            'description' => $request->customer_name,
         ]);
 
-        foreach ($request->orderProducts as $product) {
-            $order->menu()->attach($product['product_id'],
-                ['quantity' => $product['quantity']]);
+        foreach ($request->orderMenus as $menu) {
+            $order->menus()->attach($menu['menu_id'],
+                ['quantity' => $menu['quantity']]);
+
         }
 
-        $data=[
+        /* $data=[
             'name' => $request->name,
             'user_id' => Auth::user()->id,
             'description' => $request->description,
@@ -69,11 +72,12 @@ class OrderController extends Controller
          }else{
              return redirect()->back()->with('error', $resp["desc"]);
          }
+        */
 
 
 
 
-        return Redirect::route('index')->with('status', 'successfully save');
+        return Redirect::route('order.index')->with('status', 'successfully save');
     }
 
 

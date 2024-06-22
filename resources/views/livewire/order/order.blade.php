@@ -11,13 +11,13 @@
                 </em>
             @endif
         </div>
-        <div class="form-group {{ $errors->has('customer_email') ? 'has-error' : '' }}">
+        <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
             Customer email
-            <input type="email" name="customer_email" class="form-control"
-                   value="{{ old('customer_email') }}">
-            @if($errors->has('customer_email'))
+            <input type="phone" name="phone" class="form-control"
+                   value="{{ old('phone') }}">
+            @if($errors->has('phone'))
                 <em class="invalid-feedback">
-                    {{ $errors->first('customer_email') }}
+                    {{ $errors->first('phone') }}
                 </em>
             @endif
         </div>
@@ -31,34 +31,34 @@
                 <table class="table" id="products_table">
                     <thead>
                     <tr>
-                        <th>Product</th>
+                        <th>Menu</th>
                         <th>Quantity</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach ($orderProducts as $index => $orderProduct)
+                    @foreach ($orderMenus as $index => $orderMenu)
                         <tr>
                             <td>
-                                <select name="orderProducts[{{$index}}][product_id]"
-                                        wire:model="orderProducts.{{$index}}.product_id"
+                                <select name="orderMenus[{{$index}}][menu_id]"
+                                        wire:model="orderMenus.{{$index}}.menu_id"
                                         class="form-control">
-                                    <option value="">-- choose product --</option>
-                                    @foreach ($allProducts as $product)
-                                        <option value="{{ $product->id }}">
-                                            {{ $product->name }} (${{ number_format($product->price, 2) }})
+                                    <option value="">-- choose Menu --</option>
+                                    @foreach ($allMenus as $menu)
+                                        <option value="{{ $menu->id }}">
+                                            {{ $menu->name }} ({{ number_format($menu->price, 2) }})
                                         </option>
                                     @endforeach
                                 </select>
                             </td>
                             <td>
                                 <input type="number"
-                                       name="orderProducts[{{$index}}][quantity]"
+                                       name="orderMenus[{{$index}}][quantity]"
                                        class="form-control"
-                                       wire:model="orderProducts.{{$index}}.quantity" />
+                                       wire:model="orderMenus.{{$index}}.quantity" />
                             </td>
                             <td>
-                                <a href="#" wire:click.prevent="removeProduct({{$index}})">Delete</a>
+                                <a href="#" wire:click.prevent="removeMenu({{$index}})">Delete</a>
                             </td>
                         </tr>
                     @endforeach
@@ -68,7 +68,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button class="btn btn-sm btn-secondary"
-                            wire:click.prevent="addProduct">+ Add Another Product</button>
+                            wire:click.prevent="addMenu">+ Add Another Product</button>
                     </div>
                 </div>
             </div>

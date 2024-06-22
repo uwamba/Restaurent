@@ -16,7 +16,7 @@ class OrderService
 
     public function getAll()
     {
-        return $this->orderRepository->all();
+        return $this->orderRepository->orderlist();
     }
 
 

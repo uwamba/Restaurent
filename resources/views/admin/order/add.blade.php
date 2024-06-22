@@ -17,37 +17,12 @@
         @include('common.alert')
 
         <!-- DataTales Example -->
-        @livewire('order.order')
+        <div class="col-sm-8 mb-3 mt-3 mb-sm-0">
+             @livewire('order.order')
+        </div>
 
 </div>
 
 
 @endsection
-<script>
-    $("#paramsForms").on('submit', function(e) {
-    e.preventDefault();
-    $.ajaxSetup({
 
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    $.ajax({
-        url: '{{ route("order.store") }}',
-        method: "POST",
-        data: $(this).serialize(),
-        dataType: 'json',
-        beforeSend:function() {
-            $("#save").attr('disabled', 'disabled');
-        },
-        success:function (data) {
-            console.log(data);
-            alert('Data successfull saved');
-        },
-        error:function (error) {
-            console.log(error)
-            alert('Data not saved');
-        }
-    })
-})
-</script>

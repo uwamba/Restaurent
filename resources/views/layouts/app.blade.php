@@ -54,6 +54,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('admin/js/sb-admin-2.min.js')}}"></script>
+    @livewire('livewire-ui-modal')
     @livewireScripts
 
     @yield('scripts')
