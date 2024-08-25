@@ -10,9 +10,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('menu_order', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('order_id')->constrained();
             $table->foreignId('menu_id')->constrained();
             $table->integer('quantity');
+            $table->bigInteger('price');
         });
     }
 

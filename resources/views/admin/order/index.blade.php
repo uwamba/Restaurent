@@ -38,50 +38,51 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="25%">Customer Name</th>
-                                <th width="25%">Customer Phone</th>
-                                <th width="25%">created By</th>
-                                <th width="25%">View Order Items</th>
-                                <th width="25%">Edit</th>
-                                <th width="25%">Delete</th>
-
+                                <th width="25%">Customer Details</th>
+                                <th width="75%">Order Items</th>
 
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($orders as $order)
                                 <tr>
-                                    <td>{{ $order->customer_name}}</td>
-                                    <td>{{ $order->phone }}</td>
-                                    <td>{{ $order->user->name }}</td>
-                                    <td></td>
                                     <td>
+                                        <h4>{{$order->customer_name}}</h4>
+                                        <h4> {{$order->phone}}</h4>
+                                        <h4> {{$order->user->name}}</h4>
 
-                                        <button onclick="Livewire.dispatch('openModal', { component: 'order.order-items', arguments: {order: {{ $order->menus }}}})">Order Items</button>
+
+
                                     </td>
                                     <td>
-                                        <button wire:click="$emit('openModal', 'edit')">Edit</button>
-                                    </td>
-                                    <td>
-                                        <button wire:click="$emit('openModal', 'delete')">Delete</button>
+                                        <table class="table table-bordered" id="dataTable" width="70%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="25%">order Name</th>
+                                                    <th width="25%">Quantity</th>
+                                                    <th width="25%">Price</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                             @foreach ($order->menus as $menu)
+
+                                                  <tr>
+                                                     <td>{{ $menu->name}}</td>
+
+                                                     <td>{{ $menu->OrderMenu->quantity}}</td>
+                                                     <td>{{ $menu->OrderMenu->price}}</td>
+
+                                                  </tr>
+
+                                             @endforeach
+                                          </tbody>
+                                      </table>
                                     </td>
 
                                 </tr>
-                                @foreach ($order->menus as $menu)
-                                        <tr>
-                                            <td>{{ $menu->name}}</td>
-                                            <td>{{ $menu->quantity}}</td>
-                                            <td>{{ $menu->price}}</td>
-                                            <td>{{ $menu->price}}</td>
-                                            <td>{{ $menu->price}}</td>
-
-
-
-                                        </tr>
-
-
-                                    @endforeach
-
 
                             @endforeach
                         </tbody>

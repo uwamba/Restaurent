@@ -22,6 +22,12 @@ class Menu extends Model
     {
         return $this->belongsTo(Order::class);
     }
+    public function OrderMenu()
+    {
+        return $this->hasOne(OrderMenu::class);
+    }
+
+
 
     public function User()
     {

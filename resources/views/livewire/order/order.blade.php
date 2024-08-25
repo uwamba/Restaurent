@@ -51,6 +51,7 @@
                                     @endforeach
                                 </select>
                             </td>
+
                             <td>
                                 <input type="number"
                                        name="orderMenus[{{$index}}][quantity]"

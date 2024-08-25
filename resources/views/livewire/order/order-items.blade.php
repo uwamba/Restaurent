@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-{{$key = $menu->keys()}}
+             {{$key = $menu->keys()}}
 
 
 

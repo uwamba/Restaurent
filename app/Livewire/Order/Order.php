@@ -13,19 +13,23 @@ class Order extends Component
     }
     public $orderMenus = [];
     public $allMenus = [];
+    public $price = 0;
+    public $selectedOption=0;
 
     public function mount()
     {
         $this->allMenus = Menu::all();
         $this->orderMenus = [
-            ['menu_id' => '', 'quantity' => 1]
+            ['menu_id' => '', 'quantity' => 1,'price'=>$this->price]
         ];
     }
 
+
     public function addMenu()
     {
-        $this->orderMenus[] = ['menu_id' => '', 'quantity' => 1];
+        $this->orderMenus[] = ['menu_id' => '', 'quantity' => 1,'price'=> $this->price];
     }
+
 
     public function removeMenu($index)
     {

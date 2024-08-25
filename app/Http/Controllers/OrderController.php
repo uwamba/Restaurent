@@ -56,8 +56,9 @@ class OrderController extends Controller
         ]);
 
         foreach ($request->orderMenus as $menu) {
+            $price=Menu::where('id', $menu['menu_id'])->value('price');
             $order->menus()->attach($menu['menu_id'],
-                ['quantity' => $menu['quantity']]);
+                ['quantity' => $menu['quantity'],'price' => $price]);
 
         }
 
