@@ -60,6 +60,7 @@ Route::middleware('auth')->prefix('consumable')->name('consumable.')->group(func
 Route::middleware('auth')->prefix('stock')->name('stock.')->group(function(){
     Route::get('/', [StockController::class, 'index'])->name('index');
     Route::get('/create', [StockController::class, 'create'])->name('create');
+    Route::get('/out', [StockController::class, 'out'])->name('out');
     Route::post('/edit/{stock_id}', [StockController::class, 'edit'])->name('edit');
     Route::post('/update', [StockController::class, 'update'])->name('update');
     Route::post('/store', [StockController::class, 'store'])->name('store');

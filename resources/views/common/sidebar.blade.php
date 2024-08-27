@@ -45,21 +45,7 @@
         </div>
 
     </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#taTpDropDown_Category"
-            aria-expanded="true" aria-controls="taTpDropDown">
-            <i class="fa fa-plus-square" aria-hidden="true"></i>
-            <span>Categories</span>
-        </a>
-        <div id="taTpDropDown_Category" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Consumables:</h6>
-                <a class="collapse-item" href="{{route('consumable.index')}}">List</a>
-                <a class="collapse-item" href="{{route('consumable.create')}}">Add New Stock</a>
-            </div>
-        </div>
 
-    </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#taTpDropDown_subCategory"
             aria-expanded="true" aria-controls="taTpDropDown">
@@ -101,6 +87,7 @@
                 <h6 class="collapse-header">Stocks:</h6>
                 <a class="collapse-item" href="{{route('stock.index')}}">List</a>
                 <a class="collapse-item" href="{{route('stock.create')}}">Add New</a>
+                <a class="collapse-item" href="{{route('stock.out')}}">Issuing</a>
             </div>
         </div>
 
