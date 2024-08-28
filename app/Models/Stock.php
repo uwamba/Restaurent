@@ -15,6 +15,7 @@ class Stock extends Model
         'total_quantity_before',
         'trans_type',
         'management',
+        'sequence_number',
         'out_date',
         'approval',
         'status',

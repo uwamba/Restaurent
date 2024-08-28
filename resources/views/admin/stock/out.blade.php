@@ -23,7 +23,7 @@
                     <h6 class="m-0 font-weight-bold text-primary">Stock Issuing</h6>
                 </div>
 
-                <form method="POST" action="{{ route('stock.store') }}">
+                <form method="POST" action="{{ route('stock.stockOut') }}">
                     @csrf
                     <div class="card-body">
 

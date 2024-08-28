@@ -12,7 +12,8 @@ namespace PHPUnit\Framework;
 use const PHP_EOL;
 use function array_keys;
 use function array_merge;
-use function array_shift;
+use function array_pop;
+use function array_reverse;
 use function assert;
 use function call_user_func;
 use function class_exists;
@@ -52,39 +53,41 @@ use Throwable;
 /**
  * @template-implements IteratorAggregate<int, Test>
  *
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
 {
     /**
-     * @psalm-var non-empty-string
+     * @var non-empty-string
      */
     private string $name;
 
     /**
-     * @psalm-var array<non-empty-string, list<non-empty-string>>
+     * @var array<non-empty-string, list<non-empty-string>>
      */
     private array $groups = [];
 
     /**
-     * @psalm-var ?list<ExecutionOrderDependency>
+     * @var ?list<ExecutionOrderDependency>
      */
     private ?array $requiredTests = null;
 
     /**
-     * @psalm-var list<Test>
+     * @var list<Test>
      */
     private array $tests = [];
 
     /**
-     * @psalm-var ?list<ExecutionOrderDependency>
+     * @var ?list<ExecutionOrderDependency>
      */
     private ?array $providedTests    = null;
     private ?Factory $iteratorFilter = null;
     private bool $wasRun             = false;
 
     /**
-     * @psalm-param non-empty-string $name
+     * @param non-empty-string $name
      */
     public static function empty(string $name): static
     {
@@ -92,35 +95,14 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-param ReflectionClass<TestCase> $class
-     * @psalm-param list<non-empty-string> $groups
+     * @param ReflectionClass<TestCase> $class
+     * @param list<non-empty-string>    $groups
      */
     public static function fromClassReflector(ReflectionClass $class, array $groups = []): static
     {
         $testSuite = new static($class->getName());
 
-        $constructor = $class->getConstructor();
-
-        if ($constructor !== null && !$constructor->isPublic()) {
-            Event\Facade::emitter()->testRunnerTriggeredWarning(
-                sprintf(
-                    'Class "%s" has no public constructor.',
-                    $class->getName(),
-                ),
-            );
-
-            return $testSuite;
-        }
-
-        foreach (Reflection::publicMethodsInTestClass($class) as $method) {
-            if ($method->getDeclaringClass()->getName() === Assert::class) {
-                continue;
-            }
-
-            if ($method->getDeclaringClass()->getName() === TestCase::class) {
-                continue;
-            }
-
+        foreach (Reflection::publicMethodsDeclaredDirectlyInTestClass($class) as $method) {
             if (!TestUtil::isTestMethod($method)) {
                 continue;
             }
@@ -128,7 +110,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
             $testSuite->addTestMethod($class, $method, $groups);
         }
 
-        if (count($testSuite) === 0) {
+        if ($testSuite->isEmpty()) {
             Event\Facade::emitter()->testRunnerTriggeredWarning(
                 sprintf(
                     'No tests found in class "%s".',
@@ -141,7 +123,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-param non-empty-string $name
+     * @param non-empty-string $name
      */
     final private function __construct(string $name)
     {
@@ -158,6 +140,8 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
 
     /**
      * Adds a test to the suite.
+     *
+     * @param list<non-empty-string> $groups
      */
     public function addTest(Test $test, array $groups = []): void
     {
@@ -203,7 +187,8 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     /**
      * Adds the tests from the given class to the suite.
      *
-     * @psalm-param list<non-empty-string> $groups
+     * @param ReflectionClass<TestCase> $testClass
+     * @param list<non-empty-string>    $groups
      *
      * @throws Exception
      */
@@ -239,7 +224,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
      * added, a <code>PHPUnit\Framework\WarningTestCase</code> will be created instead,
      * leaving the current test run untouched.
      *
-     * @psalm-param list<non-empty-string> $groups
+     * @param list<non-empty-string> $groups
      *
      * @throws Exception
      */
@@ -272,6 +257,8 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     /**
      * Wrapper for addTestFile() that adds multiple test files.
      *
+     * @param iterable<string> $fileNames
+     *
      * @throws Exception
      */
     public function addTestFiles(iterable $fileNames): void
@@ -297,11 +284,17 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
 
     public function isEmpty(): bool
     {
-        return empty($this->tests);
+        foreach ($this as $test) {
+            if (count($test) !== 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * @psalm-return non-empty-string
+     * @return non-empty-string
      */
     public function name(): string
     {
@@ -311,7 +304,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     /**
      * Returns the test groups of the suite.
      *
-     * @psalm-return list<non-empty-string>
+     * @return list<non-empty-string>
      */
     public function groups(): array
     {
@@ -319,7 +312,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-return array<non-empty-string, list<non-empty-string>>
+     * @return array<non-empty-string, list<non-empty-string>>
      */
     public function groupDetails(): array
     {
@@ -327,7 +320,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-return list<TestCase|PhptTestCase>
+     * @return list<PhptTestCase|TestCase>
      */
     public function collect(): array
     {
@@ -366,7 +359,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
 
         $this->wasRun = true;
 
-        if (count($this) === 0) {
+        if ($this->isEmpty()) {
             return;
         }
 
@@ -379,17 +372,19 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
             return;
         }
 
-        /** @psalm-var list<Test> $tests */
+        /** @var list<Test> $tests */
         $tests = [];
 
         foreach ($this as $test) {
             $tests[] = $test;
         }
 
+        $tests = array_reverse($tests);
+
         $this->tests  = [];
         $this->groups = [];
 
-        while ($test = array_shift($tests)) {
+        while (($test = array_pop($tests)) !== null) {
             if (TestResultFacade::shouldStop()) {
                 $emitter->testRunnerExecutionAborted();
 
@@ -407,7 +402,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     /**
      * Returns the tests as an enumeration.
      *
-     * @psalm-return list<Test>
+     * @return list<Test>
      */
     public function tests(): array
     {
@@ -417,7 +412,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     /**
      * Set tests of the test suite.
      *
-     * @psalm-param list<Test> $tests
+     * @param list<Test> $tests
      */
     public function setTests(array $tests): void
     {
@@ -460,7 +455,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-return list<ExecutionOrderDependency>
+     * @return list<ExecutionOrderDependency>
      */
     public function provides(): array
     {
@@ -484,7 +479,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-return list<ExecutionOrderDependency>
+     * @return list<ExecutionOrderDependency>
      */
     public function requires(): array
     {
@@ -514,7 +509,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-assert-if-true class-string<TestCase> $this->name
+     * @phpstan-assert-if-true class-string<TestCase> $this->name
      */
     public function isForTestClass(): bool
     {
@@ -522,8 +517,8 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
     }
 
     /**
-     * @psalm-param ReflectionClass<TestCase> $class
-     * @psalm-param list<non-empty-string> $groups
+     * @param ReflectionClass<TestCase> $class
+     * @param list<non-empty-string>    $groups
      *
      * @throws Exception
      */
@@ -582,6 +577,9 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
         $this->requiredTests = null;
     }
 
+    /**
+     * @param list<non-empty-string> $groups
+     */
     private function containsOnlyVirtualGroups(array $groups): bool
     {
         foreach ($groups as $group) {
@@ -643,7 +641,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
         $beforeClassMethods = (new HookMethods)->hookMethods($this->name)['beforeClass'];
 
         try {
-            foreach ($beforeClassMethods as $beforeClassMethod) {
+            foreach ($beforeClassMethods->methodNamesSortedByPriority() as $beforeClassMethod) {
                 if ($this->methodDoesNotExistOrIsDeclaredInTestCase($beforeClassMethod)) {
                     continue;
                 }
@@ -712,7 +710,7 @@ class TestSuite implements IteratorAggregate, Reorderable, SelfDescribing, Test
 
         $afterClassMethods = (new HookMethods)->hookMethods($this->name)['afterClass'];
 
-        foreach ($afterClassMethods as $afterClassMethod) {
+        foreach ($afterClassMethods->methodNamesSortedByPriority() as $afterClassMethod) {
             if ($this->methodDoesNotExistOrIsDeclaredInTestCase($afterClassMethod)) {
                 continue;
             }

@@ -75,9 +75,9 @@ class StockController extends Controller
             'quantity' => $request->quantity,
 
         ];
-        $resp=$this->stockService->stockOut($data,$id);
+        $resp=$this->stockService->stockOut($data);
         if($resp["msg"]=="created"){
-            return redirect()->route('stock.index', ['created'=>'successfuly created']);
+            return redirect()->route('stock.index', ['created'=>'successfuly updated']);
          }else{
              return redirect()->back()->with('error', $resp["desc"]);
          }

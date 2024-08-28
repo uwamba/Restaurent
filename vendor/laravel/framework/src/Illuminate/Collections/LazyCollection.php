@@ -195,6 +195,24 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     }
 
     /**
+     * Collapse the collection of items into a single array while preserving its keys.
+     *
+     * @return static<mixed, mixed>
+     */
+    public function collapseWithKeys()
+    {
+        return new static(function () {
+            foreach ($this as $values) {
+                if (is_array($values) || $values instanceof Enumerable) {
+                    foreach ($values as $key => $value) {
+                        yield $key => $value;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Determine if an item exists in the enumerable.
      *
      * @param  (callable(TValue, TKey): bool)|TValue|string  $key
@@ -739,7 +757,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      *
      * @param  string|array<array-key, string>  $value
      * @param  string|null  $key
-     * @return static<int, mixed>
+     * @return static<array-key, mixed>
      */
     public function pluck($value, $key = null)
     {
@@ -839,6 +857,17 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     public function mergeRecursive($items)
     {
         return $this->passthru('mergeRecursive', func_get_args());
+    }
+
+    /**
+     * Multiply the items in the collection by the multiplier.
+     *
+     * @param  int  $multiplier
+     * @return static
+     */
+    public function multiply(int $multiplier)
+    {
+        return $this->passthru('multiply', func_get_args());
     }
 
     /**

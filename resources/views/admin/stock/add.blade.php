@@ -71,12 +71,14 @@
 
                         <div class="form-group row">
                             <div class="col-sm-8 mb-3 mt-3 mb-sm-0">
-                                <span style="color:red;">*</span>Managment</label>
+                                <span style="color:red;">*</span>Costing</label>
 
-                                <select class="form-select bg-dark.bg-gradient" name="consumable" id="consumable">
-                                    <option selected disabled>Select Consumable</option>
-                                    <option selected disabled>FIFO</option>
-                                    <option selected disabled>LIFO</option>
+                                <select class="form-select bg-dark.bg-gradient" name="management" id="management">
+                                    <option selected disabled>Select </option>
+                                    <option  value="FIFO">FIFO</option>
+                                    <option  value="LIFO">LIFO</option>
+                                    <option  value="WA">Weighted avarage</option>
+
                                 </select>
                             </div>
                         </div>
