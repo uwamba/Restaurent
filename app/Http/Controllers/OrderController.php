@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Helpers\PaginationHelper;
 use App\Services\OrderService;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -32,6 +33,15 @@ class OrderController extends Controller
         return view('admin.order.index',['orders'=>$orders ]);
     }
 
+    public function invoice($order)
+    {
+
+        $data =  Order::where('id',$order)->get();
+        $pdf = Pdf::loadView('admin.invoices.order_invoice',['orders'=>$data]);
+        return $pdf->download('$order'.'_invoice'.'.pdf');
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -40,6 +50,8 @@ class OrderController extends Controller
 
         return view('admin.order.add');
     }
+
+
 
     /**
      * Store a newly created resource in storage.

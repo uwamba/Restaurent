@@ -10,6 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'RRG MONEY') }} | @yield('title')</title>
+    @livewireStyles
 
     {{-- ICON --}}
     <link rel="shortcut icon" type="image/jpg" href="{{ asset('images/icon.png') }}"/>
@@ -24,9 +25,10 @@
     <!-- Custom styles for this template-->
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <link href="{{asset('admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    @livewireStyles
-
-    <!-- Scripts -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href=
+    "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<!-- datatable-->
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>

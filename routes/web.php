@@ -84,6 +84,7 @@ Route::middleware('auth')->prefix('order')->name('order.')->group(function(){
     Route::get('/create', [OrderController::class, 'create'])->name('create');
     Route::post('/edit/{stock_id}', [OrderController::class, 'edit'])->name('edit');
     Route::post('/update', [OrderController::class, 'update'])->name('update');
+    Route::get('/invoice{order}', [OrderController::class, 'invoice'])->name('invoice');
     Route::post('/store', [OrderController::class, 'store'])->name('store');
     Route::post('/delete/{stock_id}', [OrderController::class, 'delete'])->name('delete');
     Route::get('export/', [OrderController::class, 'export'])->name('export');

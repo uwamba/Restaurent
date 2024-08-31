@@ -26,7 +26,7 @@ class OrderRepository implements OrderInterface{
 
 
     public function orderlist(){
-        $Order=Order::all();
+        $Order=Order::latest()->get();
         return  $Order;
     }
 

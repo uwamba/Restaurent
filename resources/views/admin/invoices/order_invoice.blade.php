@@ -1,34 +1,213 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Laravel 6 CRUD Example</title>
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'PT Sans', sans-serif;
+        }
+
+        @page {
+            size: 2.8in 11in;
+            margin-top: 0cm;
+            margin-left: 0cm;
+            margin-right: 0cm;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        tr {
+            width: 100%;
+
+        }
+
+        h1 {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #logo {
+            width: 60%;
+            text-align: center;
+            -webkit-align-content: center;
+            align-content: center;
+            padding: 5px;
+            margin: 2px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        header {
+            width: 100%;
+            text-align: center;
+            -webkit-align-content: center;
+            align-content: center;
+            vertical-align: middle;
+        }
+
+        .items thead {
+            text-align: center;
+        }
+
+        .center-align {
+            text-align: center;
+        }
+
+        .bill-details td {
+            font-size: 12px;
+        }
+
+        .receipt {
+            font-size: medium;
+        }
+
+        .items .heading {
+            font-size: 12.5px;
+            text-transform: uppercase;
+            border-top:1px solid black;
+            margin-bottom: 4px;
+            border-bottom: 1px solid black;
+            vertical-align: middle;
+        }
+
+        .items thead tr th:first-child,
+        .items tbody tr td:first-child {
+            width: 47%;
+            min-width: 47%;
+            max-width: 47%;
+            word-break: break-all;
+            text-align: left;
+        }
+
+        .items td {
+            font-size: 12px;
+            text-align: right;
+            vertical-align: bottom;
+        }
+
+        .price::before {
+             content: "\20B9";
+            font-family: Arial;
+            text-align: right;
+        }
+
+        .sum-up {
+            text-align: right !important;
+        }
+        .total {
+            font-size: 13px;
+            border-top:1px dashed black !important;
+            border-bottom:1px dashed black !important;
+        }
+        .total.text, .total.price {
+            text-align: right;
+        }
+        .total.price::before {
+            content: "\20B9";
+        }
+        .line {
+            border-top:1px solid black !important;
+        }
+        .heading.rate {
+            width: 20%;
+        }
+        .heading.amount {
+            width: 25%;
+        }
+        .heading.qty {
+            width: 5%
+        }
+        p {
+            padding: 1px;
+            margin: 0;
+        }
+        section, footer {
+            font-size: 12px;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <table class="table table-striped">
-        <thead>
-          <th>ID</th>
-          <th>Show Name</th>
-          <th>Series</th>
-          <th>Lead Actor</th>
-          <th>Action</th>
-        </thead>
+    <header>
+        <div id="logo" class="media" data-src="logo.png" src="./logo.png"></div>
+
+    </header>
+    <p>GST Number : 4910487129047124</p>
+    <table class="bill-details">
         <tbody>
-          @foreach($shows as $show)
-          <tr>
-            <td>{{$show->id}}</td>
-            <td>{{$show->company_name}}</td>
-            <td>{{$show->department_name}}</td>
-            <td>{{$show->team_lead_name}}</td>
-          </tr>
-          @endforeach
+            <tr>
+                <td>Date : <span>1</span></td>
+                <td>Time : <span>2</span></td>
+            </tr>
+            <tr>
+                <td>Table #: <span>3</span></td>
+                <td>Bill # : <span>4</span></td>
+            </tr>
+            <tr>
+                <th class="center-align" colspan="2"><span class="receipt">Original Receipt</span></th>
+            </tr>
         </tbody>
-      </table>
-      @endsection
-  </div>
-  <script src="{{ asset('js/app.js') }}" type="text/js"></script>
+    </table>
+
+    <table class="items">
+
+        <tbody>
+            @foreach ($orders as $order)
+            <tr>
+
+                <td>
+                    <table class="items" id="dataTable" width="70%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="heading name">Item</th>
+                                <th class="heading qty">Qty</th>
+                                <th class="heading rate">Price</th>
+                                <th class="heading amount">Total</th>
+                            </tr>
+                         </thead>
+
+                        <tbody>
+                            @php($total=0)
+                            @foreach ($order->menus as $menu)
+                            @php($sub_total=$menu->OrderMenu->quantity * $menu->OrderMenu->price)
+                                <tr>
+                                    <td>{{ $menu->name }}</td>
+                                    <td>{{ $menu->OrderMenu->quantity }}</td>
+                                    <td>{{ $menu->OrderMenu->price }}</td>
+                                    <td>{{ $sub_total }}</td>
+
+
+                                </tr>
+                            {{$total +=$sub_total}}
+                            @endforeach
+                            <tr>
+                                <td class="price">{{ $total }}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    <section>
+        <p>
+            Paid by : <span>CASH</span>
+        </p>
+        <p style="text-align:center">
+            Thank you for your visit!
+        </p>
+    </section>
+    <footer style="text-align:center">
+        <p>Technology Partner Dotworld Technologies</p>
+        <p>www.dotworld.in</p>
+    </footer>
 </body>
+
 </html>

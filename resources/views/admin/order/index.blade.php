@@ -39,7 +39,9 @@
                         <thead>
                             <tr>
                                 <th width="25%">Customer Details</th>
-                                <th width="75%">Order Items</th>
+                                <th width="75%">Order Items
+
+                                </th>
 
                             </tr>
                         </thead>
@@ -47,9 +49,9 @@
                             @foreach ($orders as $order)
                                 <tr>
                                     <td>
-                                        <h4>{{$order->customer_name}}</h4>
-                                        <h4> {{$order->phone}}</h4>
-                                        <h4> {{$order->user->name}}</h4>
+                                        <h4>{{ $order->customer_name }}</h4>
+                                        <h4> {{ $order->phone }}</h4>
+                                        <h4> {{ $order->user->name }}</h4>
 
 
 
@@ -57,6 +59,14 @@
                                     <td>
                                         <table class="table table-bordered" id="dataTable" width="70%" cellspacing="0">
                                             <thead>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <a class="btn btn-primary" href="{{ route('order.invoice',['order'=>$order->id]) }}" role="button">Invoice</a>
+                                                        <input class="btn btn-primary" type="button" value="Cancel">
+                                                        <input class="btn btn-primary" type="submit" value="Delete">
+                                                        <input class="btn btn-primary" type="reset" value="Edit">
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <th width="25%">order Name</th>
                                                     <th width="25%">Quantity</th>
@@ -67,23 +77,20 @@
                                             </thead>
                                             <tbody>
 
-                                             @foreach ($order->menus as $menu)
+                                                @foreach ($order->menus as $menu)
+                                                    <tr>
+                                                        <td>{{ $menu->name }}</td>
 
-                                                  <tr>
-                                                     <td>{{ $menu->name}}</td>
+                                                        <td>{{ $menu->OrderMenu->quantity }}</td>
+                                                        <td>{{ $menu->OrderMenu->price }}</td>
 
-                                                     <td>{{ $menu->OrderMenu->quantity}}</td>
-                                                     <td>{{ $menu->OrderMenu->price}}</td>
-
-                                                  </tr>
-
-                                             @endforeach
-                                          </tbody>
-                                      </table>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </td>
 
                                 </tr>
-
                             @endforeach
                         </tbody>
                     </table>

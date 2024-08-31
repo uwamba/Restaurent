@@ -89,7 +89,7 @@ class StockRepository implements StockInterface{
                     'user_id' => Auth::user()->id,
                     'trans_type' => 'out',
                     'remain' =>'0',
-                    'unit_price'=>$price,
+                    'unit_price'=>0,
                     'quantity' =>$qty,
                     'total_quantity_before' => $lastTotalQuantity,
                     'total_quantity_after' => $lastTotalQuantity - $data['quantity'],
